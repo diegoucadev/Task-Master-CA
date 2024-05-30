@@ -14,8 +14,8 @@ class TaskRepositoryImpl(private val taskDao: TaskDao): TaskRepository {
         taskDao.insertTask(task)
     }
 
-    override suspend fun deleteNote(task: Task) {
-        taskDao.deleteNote(task)
+    override suspend fun deleteTask(task: Task) {
+        taskDao.deleteTask(task)
     }
 
 }

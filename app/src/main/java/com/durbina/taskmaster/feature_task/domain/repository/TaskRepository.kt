@@ -8,5 +8,5 @@ interface TaskRepository {
 
     suspend fun insertTask(task: Task)
 
-    suspend fun deleteNote(task: Task)
+    suspend fun deleteTask(task: Task)
 }

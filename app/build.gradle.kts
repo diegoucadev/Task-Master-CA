@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     //alias(libs.plugins.jetbrains.kotlin.android)
     id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -54,6 +55,8 @@ android {
 dependencies {
     //ROOM
     val room_version = "2.6.1"
+    val daggerhilt_version = "2.44"
+
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
     // optional - Kotlin Extensions and Coroutines support for Room
@@ -67,6 +70,11 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycle_version")
     // ViewModel utilities for Compose
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle_version")
+
+    //Dagger-Hilt
+    implementation("com.google.dagger:hilt-android:2.44")
+    implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
+    ksp("com.google.dagger:hilt-android-compiler:$daggerhilt_version")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
