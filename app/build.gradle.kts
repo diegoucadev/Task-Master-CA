@@ -73,9 +73,8 @@ dependencies {
 
     //Dagger-Hilt
     implementation("com.google.dagger:hilt-android:$daggerhilt_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
     ksp("com.google.dagger:hilt-compiler:$daggerhilt_version")
-    //implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
-    //ksp("com.google.dagger:hilt-android-compiler:$daggerhilt_version")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
