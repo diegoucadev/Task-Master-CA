@@ -17,6 +17,9 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
@@ -25,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +45,7 @@ import com.durbina.taskmaster.feature_task.domain.model.Task
 import com.durbina.taskmaster.feature_task.presentation.add_edit_task.components.IconSelector
 import com.durbina.taskmaster.feature_task.presentation.util.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +59,11 @@ fun AddEditTask(
     val selectedIcon = addEditTaskState.value.icon
     val selectedCategory = addEditTaskState.value.category
     val isExpanded = addEditTaskState.value.isExpanded
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
+
 
     Scaffold(
         topBar = {
@@ -70,14 +80,28 @@ fun AddEditTask(
         },
         floatingActionButton = {
             FloatingActionButton(onClick = {
-                viewModel.onEvent(AddEditTaskEvent.OnSaveTask)
-                navController.navigate(Screen.TaskScreen.route)
+                if (taskState.isBlank() || descriptionState.isBlank()) {
+                    scope.launch {
+                        snackbarHostState.showSnackbar(
+                            message = "Title or description cannot be empty!",
+                            duration = SnackbarDuration.Short
+                        )
+                    }
+                } else {
+                    viewModel.onEvent(AddEditTaskEvent.OnSaveTask)
+                    navController.navigate(Screen.TaskScreen.route)
+                }
+
+
             }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.save),
                     contentDescription = "Save task button"
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) {
         Column(

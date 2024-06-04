@@ -1,5 +1,6 @@
 package com.durbina.taskmaster.feature_task.presentation.tasks
 
+import android.health.connect.datatypes.units.Length
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,11 +11,16 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,6 +30,7 @@ import com.durbina.taskmaster.feature_task.presentation.tasks.components.TaskCar
 import com.durbina.taskmaster.feature_task.presentation.util.Categories
 import com.durbina.taskmaster.feature_task.presentation.util.IconType
 import com.durbina.taskmaster.feature_task.presentation.util.Screen
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,6 +39,10 @@ fun Tasks(
     viewModel: TasksViewModel = hiltViewModel()
 ) {
     val tasksState = viewModel.taskState.value
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember {
+        SnackbarHostState()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -55,6 +66,9 @@ fun Tasks(
                     contentDescription = "Add a new task"
                 )
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         }
     ) {
         LazyColumn(
