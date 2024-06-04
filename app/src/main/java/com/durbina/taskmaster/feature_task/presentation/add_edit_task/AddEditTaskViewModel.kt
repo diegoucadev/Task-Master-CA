@@ -1,12 +1,17 @@
 package com.durbina.taskmaster.feature_task.presentation.add_edit_task
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.durbina.taskmaster.feature_task.domain.model.InvalidTaskException
 import com.durbina.taskmaster.feature_task.domain.model.Task
 import com.durbina.taskmaster.feature_task.domain.use_case.TaskUseCases
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -28,7 +33,25 @@ class AddEditTaskViewModel @Inject constructor(
                     task = event.newTaskTitle
                 )
             }
-            AddEditTaskEvent.OnSaveTask -> TODO()
+            is AddEditTaskEvent.OnSaveTask -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    try {
+                        taskUseCases.addTask(
+                            Task(
+                                title = addEditTaskState.value.task,
+                                description = addEditTaskState.value.description,
+                                category = addEditTaskState.value.category,
+                                icon = addEditTaskState.value.icon
+                            )
+
+                        )
+                    } catch (e: InvalidTaskException) {
+                        Log.e("Error", "Caught an InvalidTaskException: ${e.message}")
+                    } catch (e: Exception) {
+                        Log.e("Something went wrong", "Caught an Exception: ${e.message}")
+                    }
+                }
+            }
             is AddEditTaskEvent.OnSelectCategory -> {
                 _addEditTaskState.value = addEditTaskState.value.copy(
                     category = event.selectedCategory

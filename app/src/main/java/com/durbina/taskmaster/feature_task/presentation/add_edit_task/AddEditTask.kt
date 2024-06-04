@@ -1,5 +1,7 @@
 package com.durbina.taskmaster.feature_task.presentation.add_edit_task
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,16 +33,19 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.durbina.taskmaster.R
 import com.durbina.taskmaster.feature_task.presentation.util.Categories
 import com.durbina.taskmaster.core.Constants
+import com.durbina.taskmaster.feature_task.domain.model.Task
 import com.durbina.taskmaster.feature_task.presentation.add_edit_task.components.IconSelector
+import com.durbina.taskmaster.feature_task.presentation.util.Screen
 import dagger.hilt.android.lifecycle.HiltViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(showSystemUi = true)
 @Composable
 fun AddEditTask(
+    navController: NavController,
     viewModel: AddEditTaskViewModel = hiltViewModel()
 ) {
     val addEditTaskState = viewModel.addEditTaskState.collectAsState()
@@ -64,7 +69,10 @@ fun AddEditTask(
 
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {
+                viewModel.onEvent(AddEditTaskEvent.OnSaveTask)
+                navController.navigate(Screen.TaskScreen.route)
+            }) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.save),
                     contentDescription = "Save task button"

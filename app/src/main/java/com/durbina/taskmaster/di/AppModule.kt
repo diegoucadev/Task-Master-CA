@@ -3,7 +3,10 @@ package com.durbina.taskmaster.di
 import android.app.Application
 import androidx.room.Room
 import com.durbina.taskmaster.feature_task.data.data_source.TaskDatabase
+import com.durbina.taskmaster.feature_task.data.data_source.dummyTasks
+import com.durbina.taskmaster.feature_task.data.repository.DummyRepoImpl
 import com.durbina.taskmaster.feature_task.data.repository.TaskRepositoryImpl
+import com.durbina.taskmaster.feature_task.domain.model.Task
 import com.durbina.taskmaster.feature_task.domain.repository.TaskRepository
 import com.durbina.taskmaster.feature_task.domain.use_case.AddTask
 import com.durbina.taskmaster.feature_task.domain.use_case.DeleteTask
@@ -30,7 +33,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNoteRepository(db: TaskDatabase): TaskRepository {
+    fun provideTaskRepository(db: TaskDatabase): TaskRepository {
         return TaskRepositoryImpl(db.taskDao)
     }
 
