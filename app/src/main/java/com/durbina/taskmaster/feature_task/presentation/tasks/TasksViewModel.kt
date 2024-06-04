@@ -30,6 +30,16 @@ class TasksViewModel @Inject constructor(
         getTasks()
     }
 
+    fun onEvent(event: TasksEvent) {
+        when(event) {
+            is TasksEvent.OnDeleteTask -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    taskUseCases.deleteTask(event.task)
+                }
+            }
+        }
+    }
+
     private fun getTasks() {
         getTasksJob?.cancel()
         getTasksJob = taskUseCases.getTasks().onEach {

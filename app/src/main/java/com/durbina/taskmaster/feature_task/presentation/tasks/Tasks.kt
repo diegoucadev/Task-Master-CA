@@ -81,7 +81,10 @@ fun Tasks(
                 TaskCard(
                     task = it,
                     icon = icon,
-                    backgroundColor = backgroundColor
+                    backgroundColor = backgroundColor,
+                    onDeleteTask = {
+                        viewModel.onEvent(TasksEvent.OnDeleteTask(it))
+                    }
                 )
 
             }

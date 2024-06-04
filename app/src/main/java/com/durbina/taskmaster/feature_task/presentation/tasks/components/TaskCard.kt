@@ -37,9 +37,13 @@ val testTask = Task(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskCard(task: Task, icon: ImageVector, backgroundColor: Color) {
+fun TaskCard(
+    task: Task, icon: ImageVector,
+    backgroundColor: Color,
+    onDeleteTask: (Task) -> Unit
+) {
     ElevatedCard(
-        onClick = { TODO() },
+        onClick = { onDeleteTask(task) },
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp)
@@ -74,10 +78,4 @@ fun TaskCard(task: Task, icon: ImageVector, backgroundColor: Color) {
             }
         }
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun TaskCardPreview() {
-    TaskCard(task = testTask, icon = Icons.Default.ThumbUp, backgroundColor = Color.Green)
 }
